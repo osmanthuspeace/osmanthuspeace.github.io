@@ -1,12 +1,18 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>WebView Demo</title>
   <script src="./index.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
       background: #FFF8F0;
@@ -16,22 +22,26 @@
       align-items: center;
       padding: 60px 24px 40px;
     }
+
     .title {
       font-size: 22px;
       font-weight: 700;
       color: #2A1810;
       margin-bottom: 8px;
     }
+
     .subtitle {
       font-size: 14px;
       color: #A89180;
       margin-bottom: 40px;
     }
+
     .input-wrapper {
       width: 100%;
       max-width: 400px;
       margin-bottom: 20px;
     }
+
     .input-wrapper label {
       display: block;
       font-size: 14px;
@@ -39,6 +49,7 @@
       color: #5C3A21;
       margin-bottom: 8px;
     }
+
     textarea {
       width: 100%;
       height: 120px;
@@ -52,9 +63,11 @@
       outline: none;
       transition: border-color 0.2s;
     }
+
     textarea:focus {
       border-color: #8B5E3C;
     }
+
     .btn {
       width: 100%;
       max-width: 400px;
@@ -68,9 +81,11 @@
       cursor: pointer;
       transition: opacity 0.2s;
     }
+
     .btn:active {
       opacity: 0.85;
     }
+
     .status {
       margin-top: 20px;
       font-size: 14px;
@@ -79,6 +94,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="title">WebView PostMessage 测试</div>
   <div class="subtitle">通过 JSSDK 向小程序发送追问消息</div>
@@ -102,16 +118,24 @@
         statusEl.textContent = '请输入消息内容';
         return;
       }
+      if (!wx.miniProgram.postMessage) {
+        statusEl.textContent = 'JSSDK 未找到';
+      }
+      try {
+        wx.miniProgram.postMessage({
+          data: {
+            type: 'sendFollowUpMessage',
+            message: message
+          }
+        });
+      } catch (e) {
+        throw new Error('发送失败');
+      }
 
-      wx.miniProgram.postMessage({
-        data: {
-          type: 'sendFollowUpMessage',
-          message: message
-        }
-      });
+      statusEl.textContent = '✅ 已发送，正在返回小程序...';
 
-      statusEl.textContent = '✅ 已发送: ' + message;
     });
   </script>
 </body>
+
 </html>
