@@ -1,10 +1,117 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>Hello WebView</h1>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>WebView Demo</title>
+  <script src="./index.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+      background: #FFF8F0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px 40px;
+    }
+    .title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #2A1810;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #A89180;
+      margin-bottom: 40px;
+    }
+    .input-wrapper {
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+    }
+    .input-wrapper label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      color: #5C3A21;
+      margin-bottom: 8px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 14px 16px;
+      border: 2px solid #E8DDD0;
+      border-radius: 12px;
+      font-size: 16px;
+      color: #2A1810;
+      background: #FFFFFF;
+      resize: none;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    textarea:focus {
+      border-color: #8B5E3C;
+    }
+    .btn {
+      width: 100%;
+      max-width: 400px;
+      padding: 14px 0;
+      background: linear-gradient(135deg, #8B5E3C 0%, #5C3A21 100%);
+      color: #FFFFFF;
+      font-size: 17px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:active {
+      opacity: 0.85;
+    }
+    .status {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #8B5E3C;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="title">WebView PostMessage 测试</div>
+  <div class="subtitle">通过 JSSDK 向小程序发送追问消息</div>
 
-    <script>
-      console.log(navigator.userAgent)
-    </script>
-  </body>
+  <div class="input-wrapper">
+    <label for="msg">消息内容</label>
+    <textarea id="msg">这是一条测试消息</textarea>
+  </div>
+
+  <button class="btn" id="sendBtn">发送消息到小程序</button>
+  <div class="status" id="status"></div>
+
+  <script>
+    var sendBtn = document.getElementById('sendBtn');
+    var msgInput = document.getElementById('msg');
+    var statusEl = document.getElementById('status');
+
+    sendBtn.addEventListener('click', function () {
+      var message = msgInput.value.trim();
+      if (!message) {
+        statusEl.textContent = '请输入消息内容';
+        return;
+      }
+
+      wx.miniProgram.postMessage({
+        data: {
+          type: 'sendFollowUpMessage',
+          message: message
+        }
+      });
+
+      statusEl.textContent = '✅ 已发送: ' + message;
+    });
+  </script>
+</body>
 </html>
