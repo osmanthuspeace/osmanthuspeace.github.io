@@ -101,7 +101,7 @@
 
   <div class="input-wrapper">
     <label for="msg">消息内容</label>
-    <textarea id="msg">这是一条测试消息</textarea>
+    <textarea id="msg">selectGoods</textarea>
   </div>
 
   <button class="btn" id="sendBtn">发送消息到小程序</button>
@@ -122,10 +122,22 @@
         statusEl.textContent = 'JSSDK 未找到';
       }
       try {
-        wx.miniProgram.postMessage({
-          data: {
-            type: 'sendFollowUpMessage',
-            message: message
+        WeixinJSBridge.invoke('invokeMiniProgramAPI', {
+          name: 'sendFollowUpMessage',
+          arg: {
+            content: [
+              {
+                type: 'text',
+                text: '选择拿铁',
+              },
+              {
+                type: 'api/call',
+                data: {
+                  name: 'selectDoods',
+                  arguments: {}
+                }
+              }
+            ],
           }
         });
       } catch (e) {
