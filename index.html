@@ -50,21 +50,31 @@
       margin-bottom: 8px;
     }
 
-    textarea {
+    textarea,
+    .api-input {
       width: 100%;
-      height: 120px;
       padding: 14px 16px;
       border: 2px solid #E8DDD0;
       border-radius: 12px;
       font-size: 16px;
       color: #2A1810;
       background: #FFFFFF;
-      resize: none;
       outline: none;
       transition: border-color 0.2s;
+      font-family: inherit;
     }
 
-    textarea:focus {
+    textarea {
+      height: 80px;
+      resize: none;
+    }
+
+    .api-input {
+      height: 48px;
+    }
+
+    textarea:focus,
+    .api-input:focus {
       border-color: #8B5E3C;
     }
 
@@ -100,8 +110,18 @@
   <div class="subtitle">通过 JSSDK 向小程序发送追问消息</div>
 
   <div class="input-wrapper">
-    <label for="msg">消息内容</label>
-    <textarea id="msg">selectGoods</textarea>
+    <label for="msg">消息文本 (text)</label>
+    <textarea id="msg" placeholder="例如: 选择拿铁">选择拿铁</textarea>
+  </div>
+
+  <div class="input-wrapper">
+    <label for="apiName">API 名称 (api/call name)</label>
+    <input class="api-input" id="apiName" type="text" placeholder="例如: selectGoods" value="selectGoods" />
+  </div>
+
+  <div class="input-wrapper">
+    <label for="apiArgs">API 参数 (arguments, JSON格式)</label>
+    <textarea id="apiArgs" placeholder='例如: {"key": "value"}'>{"key": "value"}</textarea>
   </div>
 
   <button class="btn" id="sendBtn">发送消息到小程序</button>
@@ -110,17 +130,30 @@
   <script>
     var sendBtn = document.getElementById('sendBtn');
     var msgInput = document.getElementById('msg');
+    var apiNameInput = document.getElementById('apiName');
+    var apiArgsInput = document.getElementById('apiArgs');
     var statusEl = document.getElementById('status');
 
     sendBtn.addEventListener('click', function () {
       var message = msgInput.value.trim();
+      var apiName = apiNameInput.value.trim();
+      var apiArgsRaw = apiArgsInput.value.trim();
+
       if (!message) {
-        statusEl.textContent = '请输入消息内容';
+        statusEl.textContent = '请输入消息文本';
         return;
       }
-      if (!wx.miniProgram.postMessage) {
-        statusEl.textContent = 'JSSDK 未找到';
+
+      var apiArgs = {};
+      if (apiArgsRaw) {
+        try {
+          apiArgs = JSON.parse(apiArgsRaw);
+        } catch (e) {
+          statusEl.textContent = '❌ arguments JSON 格式错误';
+          return;
+        }
       }
+
       try {
         WeixinJSBridge.invoke('invokeMiniProgramAPI', {
           name: 'sendFollowUpMessage',
@@ -133,8 +166,8 @@
               {
                 type: 'api/call',
                 data: {
-                  name: message,
-                  arguments: {}
+                  name: apiName,
+                  arguments: apiArgs
                 }
               }
             ],
