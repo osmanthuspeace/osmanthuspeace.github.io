@@ -1,0 +1,142 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: #EDEDED;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px 40px;
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #888888;
+  margin-bottom: 40px;
+}
+
+.input-wrapper {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 8px;
+  background: #FFFFFF;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.input-wrapper label {
+  display: block;
+  font-size: 14px;
+  color: #888888;
+  padding: 12px 16px 4px;
+}
+
+textarea,
+.api-input {
+  width: 100%;
+  padding: 8px 16px 14px;
+  border: none;
+  font-size: 16px;
+  color: #000000;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+}
+
+textarea::placeholder,
+.api-input::placeholder {
+  color: #B2B2B2;
+}
+
+textarea {
+  height: 76px;
+  resize: none;
+}
+
+.api-input {
+  height: auto;
+}
+
+.btn {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 0;
+  background: #07C160;
+  color: #FFFFFF;
+  font-size: 17px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 16px;
+}
+
+.btn:active {
+  background: #06AD56;
+}
+
+.status {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888888;
+  min-height: 20px;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background: #191919;
+  }
+
+  .title {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .subtitle {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .input-wrapper {
+    background: #2C2C2C;
+  }
+
+  .input-wrapper label {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  textarea,
+  .api-input {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  textarea::placeholder,
+  .api-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .btn {
+    background: #07C160;
+    color: #FFFFFF;
+  }
+
+  .btn:active {
+    background: #06AD56;
+  }
+
+  .status {
+    color: rgba(255, 255, 255, 0.5);
+  }
+}
