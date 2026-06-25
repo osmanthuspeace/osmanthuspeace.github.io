@@ -90,6 +90,7 @@
       border-radius: 12px;
       cursor: pointer;
       transition: opacity 0.2s;
+      margin-top: 12px;
     }
 
     .btn:active {
@@ -101,6 +102,10 @@
       font-size: 14px;
       color: #8B5E3C;
       min-height: 20px;
+    }
+    
+    .divider {
+      height: 100px;
     }
   </style>
 </head>
@@ -125,6 +130,7 @@
   </div>
 
   <button class="btn" id="sendBtn">发送消息到小程序</button>
+  <button class="btn" id="reapplyBtn">发送 reapply 到小程序</button>
   <div class="status" id="status"></div>
 
   <script>
@@ -179,6 +185,34 @@
 
       statusEl.textContent = '✅ 已发送，正在返回小程序...';
 
+    });
+
+    reapplyBtn.addEventListener('click', function () {
+      var apiName = apiNameInput.value.trim();
+      var apiArgsRaw = apiArgsInput.value.trim();
+
+      var apiArgs = {};
+      if (apiArgsRaw) {
+        try {
+          apiArgs = JSON.parse(apiArgsRaw);
+        } catch (e) {
+          statusEl.textContent = '❌ arguments JSON 格式错误';
+          return;
+        }
+      }
+
+      try {
+        WeixinJSBridge.invoke('invokeMiniProgramAPI', {
+          name: 'reapplyApiCall',
+          arg: {
+            arguments: apiArgs
+          }
+        });
+      } catch (e) {
+        throw new Error('发送失败');
+      }
+
+      statusEl.textContent = '✅ 已发送，正在返回小程序...';
     });
   </script>
 </body>
