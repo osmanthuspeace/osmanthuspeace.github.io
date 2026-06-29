@@ -6,103 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>WebView Demo</title>
   <script src="./index.js"></script>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
-      background: #FFF8F0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 60px 24px 40px;
-    }
-
-    .title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #2A1810;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      font-size: 14px;
-      color: #A89180;
-      margin-bottom: 40px;
-    }
-
-    .input-wrapper {
-      width: 100%;
-      max-width: 400px;
-      margin-bottom: 20px;
-    }
-
-    .input-wrapper label {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: #5C3A21;
-      margin-bottom: 8px;
-    }
-
-    textarea,
-    .api-input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 2px solid #E8DDD0;
-      border-radius: 12px;
-      font-size: 16px;
-      color: #2A1810;
-      background: #FFFFFF;
-      outline: none;
-      transition: border-color 0.2s;
-      font-family: inherit;
-    }
-
-    textarea {
-      height: 80px;
-      resize: none;
-    }
-
-    .api-input {
-      height: 48px;
-    }
-
-    textarea:focus,
-    .api-input:focus {
-      border-color: #8B5E3C;
-    }
-
-    .btn {
-      width: 100%;
-      max-width: 400px;
-      padding: 14px 0;
-      background: linear-gradient(135deg, #8B5E3C 0%, #5C3A21 100%);
-      color: #FFFFFF;
-      font-size: 17px;
-      font-weight: 600;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .btn:active {
-      opacity: 0.85;
-    }
-
-    .status {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #8B5E3C;
-      min-height: 20px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -125,6 +29,7 @@
   </div>
 
   <button class="btn" id="sendBtn">发送消息到小程序</button>
+  <button class="btn" id="reapplyBtn">发送 reapply 到小程序</button>
   <div class="status" id="status"></div>
 
   <script>
@@ -179,6 +84,34 @@
 
       statusEl.textContent = '✅ 已发送，正在返回小程序...';
 
+    });
+
+    reapplyBtn.addEventListener('click', function () {
+      var apiName = apiNameInput.value.trim();
+      var apiArgsRaw = apiArgsInput.value.trim();
+
+      var apiArgs = {};
+      if (apiArgsRaw) {
+        try {
+          apiArgs = JSON.parse(apiArgsRaw);
+        } catch (e) {
+          statusEl.textContent = '❌ arguments JSON 格式错误';
+          return;
+        }
+      }
+
+      try {
+        WeixinJSBridge.invoke('invokeMiniProgramAPI', {
+          name: 'reapplyApiCall',
+          arg: {
+            arguments: apiArgs
+          }
+        });
+      } catch (e) {
+        throw new Error('发送失败');
+      }
+
+      statusEl.textContent = '✅ 已发送，正在返回小程序...';
     });
   </script>
 </body>
